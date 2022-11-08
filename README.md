@@ -268,3 +268,125 @@ function movimentaAtor(){
 ```
 
 <p>Nosso jogo terá movimento. Entretanto, teremos muitas linhas de código para alcançar esse resultado. Temos códigos para o fundo, o carro, o ator e para os movimentos. A seguir pensaremos formas de estruturar melhor nosso código para dar continuidade ao projeto.</p>
+
+<h1>Módulo 02. Dividindo o código e carros para sempre</h1>
+
+>Dividindo códigos em arquivos
+
+<p>Criamos os primeiros movimentos do nosso jogo. Conseguimos movimentar nossa vaquinha por meio das setas e visualizar o carro passando.</p>
+
+<p>Mas nesse arquivo "sketch.js" temos quase 50 linhas de código com muitas responsabilidades diferentes. Há um código responsável pelo ator, um pelo carro, outro pelo jogo, enfim, muitas ações num mesmo arquivo, e isso pode nos confundir a medida que nosso projeto cresce.</p>
+
+<p>Para organizar melhor nosso desenvolvimento, criaremos um arquivo .js só para o ator, um só para o carregamento da imagem e um só para o carro. Assim, a divisão ficará muito mais clara e se tornará muito mais fácil trabalharmos.</p>
+
+<p>Em primeiro lugar, criaremos um arquivo para as imagens, Só para o carregamento das imagens temos 8 linhas de código contando com as variáveis e a função de pré-carregamento. Clicaremos na seta para baixo em "project folder" e selecionaremos a opção "Add file" para selecionar um arquivo novo que chamaremos de "imagens.js". Vamos recortar as variáveis referentes às imagens e colar no arquivo novo. Faremos o mesmo com a função preload().</p>
+
+```
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+}
+
+```
+
+Rodaremos para ver se o jogo está funcionando e ele ficará carregando sem que nada apareça. A mensagem de erro alertará que imagemDaEstrada não foi definida. Na verdade ela foi definida, o que acontece é que não teremos apenas o código do "sketch.js" sendo executado.
+
+<p>Para conseguir definir que um código Javascript deve ser executado durante o jogo, faremos isso no "index.html". Dentro da tag body teremos o script que fala para executar um código e ele só terá o "sketch.js". Por isso copiaremos essa linha para baixo e substituiremos "sketch.js" por "imagens.js", ficando script src=""imagens.js"script no index.</p>
+
+<p>Agora daremos "Play" e nosso jogo estará funcionando da mesma forma anterior, com a responsabilidade dividida. Fizemos isso para as imagens , agora criaremos um arquivo com o código Javascript com as responsabilidades referentes ao ator. Clicaremos novamente na seta para baixo próxima a "project folder" e selecionaremos "Add file", chamando o novo arquivo de "ator. js". Vamos clicar em "Add" será adicionado o arquivo.</p>
+
+<p>Tudo que for relacionado ao ator será enviado para esse código. Comentaremos //código do ator para deixar claro do que se trata, assim como //Imgens do jogo em cima do código em "imagens.js".</p>
+
+<p>Em "ator.js" teremos yAtor e a função que mostra o ator, que precisaremos copiar de "sketch.js" e depois remover daquele arquivo. Para isso podemos usar o atalho "Ctrl + x". O código que movimenta o ator também será necessário.</p>
+
+```
+//código do ator
+let yAtor = 366;
+
+function mostraAtor(){
+  image(imagemDoAtor, 100, yAtor, 30, 30);
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+
+```
+
+<p>
+    Em "index.js" criaremos mais uma linha de script para "ator.js", script src="ator.js" script. Vamos executar e aparecerá o ator, com o jogo funcionando perfeitamente mais uma vez.
+
+</p>    
+
+<p>Agora adicionaremos um novo arquivo chamado "carro.js" e comentaremos //código do carro. Copiaremos de "sketch.js" os códigos do carro, a variável xCarro, a função para mostrá-lo e a para movimentá-lo. Mais uma vez vamos ao "index" para referenciar esses códigos com mais uma tag, script src=""carro.js" script.</p>
+
+```
+//código do carro
+
+let xCarro = 600;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, 40, 50, 40);
+}
+
+function movimentaCarro(){
+  xCarro -= 2;
+}
+```
+
+<p>
+    Conseguimos fazer o jogo funcionar com todas as responsabilidades divididas agora.
+
+</p>    
+<p>Nossa função principal do jogo,"sketch.js", ficará com as funções setup() e draw(), a função que desenha. Nela colocamos como imagem de fundo a imagemDaEstrada, mas as imagens vem do arquivo criado só para elas, em que carregamos as imagens do jogo. E durante o desenvolvimento, ainda vamos carregar outras imagens. Por isso é importante fazer essa separação.</p>
+
+<p>Olhando o arquivo do ator, teremos o yAtor, mas podemos melhorar o código criando um xAtor, pois o valor "100" será o da posição de "x" do nosso ator na imagem.</p>
+
+```
+//código do ator
+let xAtor = 100;
+let yAtor = 366;
+
+function mostraAtor(){
+  image(imagemDoAtor, xAtor, yAtor, 30, 30);
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+```
+
+<p>No carro, faremos o mesmo. Já temos xCarro e criaremos yCarro que será igual a posição "40", para padronizar o código.</p>
+
+```
+//código do carro
+
+let xCarro = 600;
+let yCarro = 40;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarro, 50, 40);
+}
+
+function movimentaCarro(){
+  xCarro -= 2;
+}
+```
+<p>
+    Executaremos o teremos o mesmo comportamento com um código muito mais claro com as devidas divisões de responsabilidades.
+</p>
