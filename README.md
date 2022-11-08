@@ -4,6 +4,7 @@ Aprendendo lógica de programação na ALURA | Criando o jogo Freeway
 <h1>Módulo 01: Iniciando o projeto</h1>
 
 >Introdução
+
 <p>Olá, meu nome é Guilherme Lima e nesse curso vamos dar continuidade aos nossos estudos sobre Javascript recriando um jogo clássico super legal, o Freeway, em que tínhamos um personagem que tentava atravessar uma rodovia com vários carros passando. Este era um jogo de cartucho feito para o Atari e vamos recriá-lo utilizando a linguagem Javascript.<br>
 
 Para visualizar como era o jogo da forma original, havia vários carros passando numa rodovia e conforme conseguíamos chegar até o outro lado dela, marcávamos pontos. Cada carro passava numa velocidade diferente e eles iam passando em forma de loop.<br>
@@ -164,3 +165,106 @@ Agora sim o carrinho estará no lugar que gostaríamos. Lembrando que no desenvo
 <br><br>
 No próximo vídeo vamos dar vida para o jogo.
 </p>
+
+> Movimentando ator e carro
+
+<p>Deixamos o visual do nosso jogo muito mais interessante, mas ele ainda não tem movimento.</p>
+
+<p>Vamos começar movimentando o carro. Precisamos de alguma forma conseguir alterar a posição "x" do carro. Quando colocamos a imagem, passamos os valores para posicioná-la.</p>
+
+```
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+
+function preload(){
+    imagemDaEstrada = loadImage("imagens/estrada.png");
+    imagemDoAtor = loadImage("imagens/ator-1.png");
+    imagemCarro = loadImage("imagens/carro-1.png")
+}
+
+function setup() {
+    createCanvas(500, 400);
+}
+
+function draw() {
+    background(imagemDaEstrada);
+    image(imagemDoAtor, 100, 366, 30, 30);
+    image(imagemCarro, 420, 40, 50, 40)
+}
+
+```
+
+<p>Porém, pode ser que não esteja claro o que sejam esses valores para quem olhar o código, apesar de nós, que desenvolvemos, sabermos quais são as posições "x" e "y". Mas para tornar o jogo ainda mais compreensível, criaremos uma variável para o carro, por exemplo, a xCarro, e atribuiremos a ela o valor "420" da posição. Assim, em vez de passar "420" como parâmetro para a image() na função draw(), passaremos xCarro e teremos o mesmo resultado.</p>
+
+<p>Agora queremos movimentar o carro. Nosso código pode ficar confuso, pois estamos alterando o background, desenhando um ator e um carro utilizando só as funções iniciais e image(). Para manter nosso código organizado, criaremos uma função chamada function mostraAtor(). Dentro dela, executaremos a image() responsável por mostrar o ator. Para ela funcionar, vamos chamá-la na função draw() . Veremos que dessa forma nosso código ficará muito mais organizado.</p>
+
+<p>Teremos desenhado o background, depois mostraremos o ator e também a imagem do carro em seguida. Criaremos mais uma função e chamá-la de mostraCarro(). Dentro do corpo da função, passaremos o image(imagemCarro, xCarro, 40, 50, 40) e colocaremos ponto e vírgula ao final (;), ainda que seja opcional. Na função draw() chamaremos a função mostraCarro(). Teremos o mesmo resultado.</p>
+
+<p>Agora que conseguimos visualizar nosso código um pouco mais claramente, criaremos uma função para de fato conseguir movimentar o carro, movimentaCarro(). Nosso carro está começando na posição "420". Podemos deixá-lo ainda mais longe, fora da tela, partindo de "600". Queremos que ele, partindo dessa posição, apareça na tela e depois saia. Para isso, teremos o valor "x" do carro. Como queremos que ele passe a tela, podemos subtrair esse valor. Pensaremos que quanto mais do lado esquerdo ele estiver, menor será o valor de "x". Por isso. na função movimentaCarro(), escreveremos que xCarro = xCarro - 2, por exemplo, apenas para conseguir visualizar isso.</p>
+
+<p>Ligaremos clicando no "Play" e veremos nosso carrinho passando da direita para a esquerda. Temos o primeiro movimento do carro. É interessante dizer que quando queremos alterar o valor de uma variável não é necessário escrever dessa forma xCarro = xCarro - 2. Existe uma forma simplificada de fazermos isso, escrevendo xCarro -=2. O resultado será um comportamento igual.</p>
+
+<p>
+    Também queremos movimentar meu personagem. A vaquinha deverá andar quando utilizarmos as setas do teclado, por exemplo. Dessa forma, as setas servirão para movimentar a vaquinha para cima e para baixo. Este será o mesmo comportamento obtido para o jogo do Pong, em que tínhamos as raquetes e movimentávamos elas para cima e para baixo. Chamaremos uma função dentro da draw() para isso, movimentaAtor(), e faremos a criação dessa função abaixo. Nela vamos verificar que se a tecla estiver pressionada para baixo, ou seja, if(keyIsDown). Para conseguirmos pegar a tecla para cima, a referência dela será (UP_ARROW), ficando if(keyIsDown(UP_ARROW)). Como temos um if, isso significa que uma ação será executada se essa tecla estiver pressionada. O if também terá um corpo, definido por abrir e fechar chaves.
+
+</p>   
+<p>Criaremos o "y" para nosso ator . Comentaremos para poder indicar a que cada código diz respeito, como fizemos com o carro, para criar yAtor. Atribuiremos a ele o valor que tínhamos definido, "366". Na função mostraAtor passaremos yAtor() no lugar de "366" e quando a tecla para cima estiver pressionada, movimentaremos o ator.</p>
+
+<p>Sendo assim, o yAtor será alterado. Subtrairemos yAtor -= 3 e vamos testar. Executando, nosso jogo funcionará. Quando apertarmos pra cima, a vaquinha andará.</p>
+
+<p>Já teremos o primeiro desafio, clicando na tela, o carro passará e a vaquinha atravessará a rua. Mas não queremos que o personagem vá só pra cima. Copiaremos esse código com "Ctrl + C" e colaremos com "Ctrl + V". Substituiremos UP_ARROW pela seta para baixo DOWN_ARROW e ao invés de subtrair 3, somaremos 3. Agora conseguiremos ir para cima e para baixo com nosso personagem.</p>
+
+```
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+
+//carro
+let xCarro = 600;
+
+//ator
+let yAtor = 366;
+
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+}
+
+function setup() {
+  createCanvas(500, 400);
+}
+
+function draw() {
+  background(imagemDaEstrada);
+  mostraAtor();
+  mostraCarro();
+  movimentaCarro();
+  movimentaAtor();
+}
+
+function mostraAtor(){
+  image(imagemDoAtor, 100, yAtor, 30, 30);
+}
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, 40, 50, 40);
+}
+
+function movimentaCarro(){
+  xCarro -= 2;
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+
+```
+
+<p>Nosso jogo terá movimento. Entretanto, teremos muitas linhas de código para alcançar esse resultado. Temos códigos para o fundo, o carro, o ator e para os movimentos. A seguir pensaremos formas de estruturar melhor nosso código para dar continuidade ao projeto.</p>
