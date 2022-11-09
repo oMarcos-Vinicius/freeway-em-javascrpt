@@ -2,7 +2,7 @@
 yAtor = 366;
 xAtor = 120;
 
-let imagemDoAtor;
+
 
 function mostrarAtor() {
     image(imagemDoAtor, xAtor, yAtor, 30, 30)

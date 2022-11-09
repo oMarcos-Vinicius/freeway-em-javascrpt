@@ -390,3 +390,133 @@ function movimentaCarro(){
 <p>
     Executaremos o teremos o mesmo comportamento com um código muito mais claro com as devidas divisões de responsabilidades.
 </p>
+
+>Adicionado mais carros
+
+<p>Agora que dividimos as responsabilidades de código para cada arquivo, vamos colocar mais dois carros no nosso jogo.</p>
+
+<p>No código de imagens temos apenas um carro, portanto precisamos carregar a imagem dos outros carros, 2 e 3. Já temos as demais imagens carregadas, pois subimos anteriormente, então vamos copiar esse código.</p>
+
+<p>Criaremos a variável imagemCarro2 e imagemCarro3. Copiaremos a linha de código para carregar a imagem dentro da função preload() para baixo e substituiremos para os carros novos no caminho. Teremos, então loadImage("imagens/carro-2.png") e loadImage("imagens/carro-3.png").</p>
+
+```
+// imagens do jogo
+
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+let imagemCarro2;
+let imagemCarro3;
+
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+  imagemCarro2 = loadImage("imagens/carro-2.png");
+  imagemCarro3 = loadImage("imagens/carro-3.png");
+}
+```
+
+<p>Precisaremos desenhar essas imagens na tela. Vamos para o código do carro e notaremos que as variáveis xCarro e yCarro serão referentes ao primeiro carro. Por isso vamos comentar //carro 1 sobre elas para tornar isso claro. Na sequência vamos declarar xCarro2 e yCarro2. Atribuiremos valores para posicioná-los depois e vamos testar se eles ficarão como gostaríamos.</p>
+
+<p>Vamos agora desenhar a imagem do segundo carro na função draw(). Ambos os carros podem partir do mesmo lugar, do eixo "x" com o valor "600". Mas queremos que o eixo "y" do carro de baixo seja maior, para que ele fique na faixa de baixo. Testaremos o valor "96".</p>
+
+<p>Porém, queremos que o movimento dele seja diferente. Para o primeiro, deixamos "-2" para a movimentação. Agora o carro deverá se mover mais rápido, por isso faremos xCarro2 -= 3.</p>
+
+```
+//código do carro
+
+//carro 1
+let xCarro = 600;
+let yCarro = 40;
+
+//carro 2
+let xCarro2 = 600;
+let yCarro2 = 96;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarro, 50, 40);
+  image(imagemCarro2, xCarro, yCarro, 50, 40);
+}
+
+function movimentaCarro(){
+  xCarro -= 2;
+  xCarro2 -= 3;
+}
+```
+
+<p>Vamos ligar e executar. A imagem de um carro aparecerá, mas não a do outro, porque quando copiamos nosso código deixamos a imagem do carro 2, mas o "x" e o "y" do carro 1, um dos perigos de copiar e colar. Vamos corrigir isso no código alterando para os eixos corretos do carro 2, image(imagemCarro2, xCarro2, yCarro2, 50, 40), e executaremos novamente. Dessa forma veremos dois carros passando com velocidades diferentes agora.</p>
+
+<p>Precisamos acrescentar o terceiro carro por meio do mesmo processo, declarando as variáveis xCarro3 a qual atribuiremos o valor "600" e yCarro3, que testaremos atribuir "150".</p>
+
+<p>Vamos copiar e colar a linha do pré-carregamento tomando cuidado para passar corretamente o "x" e o "y" do carro 3. Também precisaremos alterar o movimento do carro, e usaremos um valor intermediário entre os demais carros, xCarro3 -= 2.5.</p>
+
+```
+//código do carro
+
+//carro 1
+let xCarro = 600;
+let yCarro = 40;
+
+//carro 2
+let xCarro2 = 600;
+let yCarro2 = 96;
+
+//carro 3
+let xCarro3 = 600;
+let yCarro3 = 150;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarro, 50, 40);
+  image(imagemCarro2, xCarro2, yCarro2, 50, 40);
+    image(imagemCarro2, xCarro3, yCarro3, 50, 40);
+
+}
+
+function movimentaCarro(){
+  xCarro -= 2;
+  xCarro2 -= 3;
+    xCarro3 -= 2.5;
+}
+```
+
+<p>Agora quando executarmos já teremos os três carrinhos passando. Mas é importante pensarmos um pouco melhor sobre a legibilidade do código. Se outra pessoa visse nosso código, ela conseguiria entendê-lo?</p>
+
+<p>Os valores xCarro -= 2, xCarro2 -= 3 e xCarro3 -= 2.5 não são nada mais do que a velocidade com que os carros vão passar na tela. Se alterarmos para xCarro2 -= 5 e executarmos, veremos o carro passando muito mais rápido que os demais.</p>
+
+<p>Então escreveremos que essa se trata da velocidade dos carros, criando variáveis para cada um. A velocidadeCarro1 será igual a "2", velocidadeCarro2 será igual a "3" e velocidadeCarro3 será "2.5". Executando, tudo funcionará, mas escolheremos uma faixa para ser a mais rápida.</p>
+
+<p>A primeira faixa, de cima, será a mais lenta. Na segunda, o carro será um pouco mais rápido que na primeira. E na terceira, mais rápido do que em todas as outras. Então, para testarmos, o primeiro carro terá velocidade "2", o segundo, "2.5" e o terceiro "3.2".</p>
+
+<p>Sendo assim, ficou muito mais fácil alterar a velocidade dos carros com essa sintaxe, pois a clareza está muito maior.</p>
+
+```
+//código do carro
+
+//carro 1
+let xCarro = 600;
+let yCarro = 40;
+let velocidadeCarro1= 2;
+
+//carro 2
+let xCarro2 = 600;
+let yCarro2 = 96;
+let velocidadeCarro2= 2.5;
+
+//carro 3
+let xCarro3 = 600;
+let yCarro3 = 150;
+let velocidadeCarro3= 3.2;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarro, 50, 40);
+  image(imagemCarro2, xCarro2, yCarro2, 50, 40);
+    image(imagemCarro3, xCarro3, yCarro3, 50, 40);
+}
+
+function movimentaCarro(){
+    xCarro -= velocidadeCarro1;
+    xCarro2 -= velocidadeCarro2;
+    xCarro3 -= velocidadeCarro3;
+}
+```
