@@ -520,3 +520,174 @@ function movimentaCarro(){
     xCarro3 -= velocidadeCarro3;
 }
 ```
+
+>Criando Listas
+
+<p>Nosso jogo tem um comportamento interessante. Quando ligamos, temos três carros, nosso personagem se movimenta, os carros passam e reaparecem na tela.</p>
+
+<p>Mas um ponto importante a ser ressaltado é que temos três variáveis para o carro 1, três para o carro 2 e três para o carro 3. Ou seja, há muitas variáveis para fazer algo semelhante.</p>
+
+<p>Conseguimos melhorar essa quantidade de variáveis utilizando listas e aprenderemos agora como podemos trabalhar com elas.</p>
+
+<p>Nossa primeira ação será criar uma variável da mesma forma que tínhamos antes, com o let, e chamaremos de yCarros. Diremos que ela é igual a uma lista. Uma lista é uma estrutura de dados para inserirmos os dados que queremos e recuperamos essas informações por meio de índices. Indicamos que queremos criar uma lista com colchetes. Então, tudo que colocarmos dentro dos colchetes atribuídos à lista yCarros fará parte dela. Colocaremos o valor "y" de cada carro nesse espaço. O "y" do carro 1 será "40", o do 2, "96", o do 3, "150". Teremos yCarros = [40, 96, 150].</p>
+
+<p>Agora que criamos nossa lista, precisamos ver como recuperar esse valor para utilizar no código. Para conseguirmos visualizar no nosso console, colocaremos um print() na função mostraCarro() e dentro dele diremos que nossa intenção é ver a posição 1 de yCarros para ver o que será retornado.</p>
+
+```
+//código do carro
+
+let yCarros = [40, 96, 150]; 
+
+//carro 1
+
+let xCarro = 600;
+let yCarro = 40;
+let velocidadeCarro1 = 2;
+
+//carro 2
+
+let xCarro2 = 600;
+let yCarro2 = 96;
+let velocidadeCarro2 = 2.5;
+
+//carro 3
+
+let xCarro3 = 600;
+let yCarro3 = 150;
+let velocidadeCarro3 = 3.2;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarro, 50, 40);
+  image(imagemCarro2, xCarro2, yCarro2, 50, 40);
+  image(imagemCarro3, xCarro3, yCarro3, 50, 40);
+        print(yCarros[1]);
+}
+
+function movimentaCarro(){
+  xCarro -= velocidadeCarro1;
+  xCarro2 -= velocidadeCarro2;
+  xCarro3 -= velocidadeCarro3;
+}
+
+function voltaPosicaoInicialDoCarro(){
+  if (xCarro < -50){
+    xCarro = 600
+  }
+  if (xCarro2 < -50){
+    xCarro2 = 600
+  }
+  if (xCarro3 < -50){
+    xCarro3 = 600
+  }
+}
+```
+
+<p>Pressionaremos o "Play" e será retornado o "96" para nós algumas vezes, o segundo elemento da lista. Mas por que ele voltou o "96" e não o "40"?</p>
+
+Acontece que quando utilizamos listas, nosso primeiro elemento, no caso o "40", será recuperado a partir do índice 0. Na lista yCarros = [40, 96, 150] "40" será a posição 0, "96" a posição 1, e "150" a posição 2.
+
+<p>Se colocarmos print(yCarros[0]) em mostraCarro() será mostrado o valor "40" no console. Para print(yCarros[2]) será mostrado "150", nosso terceiro elemento da lista. Devemos sempre lembrar desse detalhe.</p>
+
+<p>Agora que sabemos como recuperar esses valores, podemos remover as três variáveis yCarro1, yCarro2 e yCarro3, pois q partir de agora usaremos nossa lista. Na função mostraCarro , para começar, passaremos yCarros[0], o primeiro elemento, como terceiro parâmetro na primeira linha de image(). Na segunda, yCarros[1], o segundo elemento. Em seguida, yCarros[2], o terceiro elemento.</p>
+
+```
+//código do carro
+
+let yCarros = [40, 96, 150]; 
+
+//carro 1
+
+let xCarro = 600;
+let velocidadeCarro1 = 2;
+
+//carro 2
+
+let xCarro2 = 600;
+let velocidadeCarro2 = 2.5;
+
+//carro 3
+
+let xCarro3 = 600;
+let velocidadeCarro3 = 3.2;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarros[0], 50, 40);
+  image(imagemCarro2, xCarro2, yCarros[1], 50, 40);
+  image(imagemCarro3, xCarro3, yCarros[2], 50, 40);
+}
+
+//trecho do código omitido
+}
+```
+
+<p>Pressionaremos "Play" e nosso jogo estará funcionando da mesma forma. Essa será uma maneira de melhorar nosso código. Já que criamos uma variável para a posição "y" dos carros, criaremos também para a velocidade. velocidadeCarros será igual a uma lista e passaremos os valores. velocidadeDoCarro1 é "2", e ficará como a posição 0, velocidadeDoCarro2 é "2.5" e ficará como a posição 1 e velocidadeDoCarro3 é "3.2" e ficará como a posição 2 no índice. Removeremos as três variáveis de velocidades do código e alteraremos a função movimentaCarro(). No lugar em que atribuíamos as variáveis a xCarro, xCarro2 e xCarro3, colocaremos velocidadeCarros[] com as devidas posições correspondentes à velocidade de cada carro.</p>
+
+```
+//código do carro
+
+let yCarros = [40, 96, 150]; 
+let velocidadeCarros = [2, 2.5, 3.2];
+
+//carro 1
+let xCarro = 600;
+
+//carro 2
+let xCarro2 = 600;
+
+//carro 3
+let xCarro3 = 600;
+
+function mostraCarro(){
+  image(imagemCarro, xCarro, yCarros[0], 50, 40);
+  image(imagemCarro2, xCarro2, yCarros[1], 50, 40);
+  image(imagemCarro3, xCarro3, yCarros[2], 50, 40);
+}
+
+function movimentaCarro(){
+  xCarro -= velocidadeCarros[0];
+  xCarro2 -= velocidadeCarros[1];
+  xCarro3 -= velocidadeCarros[2];
+}
+
+//trecho do código omitido
+}
+```
+
+<p>Vamos rodar e o jogo continuará funcionando. Ainda faltará criar uma lista para xCarros. Dentro dela, os valores serão: xCarros = [600, 600, 600]. Removeremos as três variáveis que não serão mais necessárias e teremos reduzido de 9 variáveis para três listas.</p>
+
+<p>Nos lugares em que apareciam as variáveis das posições "x" dos carros, substituiremos pelas posições no índice. Primeiramente na função mostraCarro() e na sequência em movimentaCarro().</p>
+
+<p>Por fim, em voltaPosicaoInicialDoCarro(), em que fazemos a verificação para os carros voltarem a aparecer na tela, também substituiremos. Se xCarros no índice 0 for menor que "-50" voltaremos a xCarros nesse mesmo índice, para essa posição. No if seguinte o processo será o mesmo para xCarros no índice 1 e no próximo, para xCarros no índice 2.</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600];
+let yCarros = [40, 96, 150]; 
+let velocidadeCarros = [2, 2.5, 3.2];
+
+function mostraCarro(){
+  image(imagemCarro, xCarros[0], yCarros[0], 50, 40);
+  image(imagemCarro2, xCarros[1], yCarros[1], 50, 40);
+  image(imagemCarro3, xCarros[2], yCarros[2], 50, 40);
+}
+
+function movimentaCarro(){
+  xCarros[0] -= velocidadeCarros[0];
+  xCarros[1] -= velocidadeCarros[1];
+  xCarros[2] -= velocidadeCarros[2];
+}
+
+function voltaPosicaoInicialDoCarro(){
+  if (xCarros[0] < -50){
+    xCarros[0] = 600
+  }
+  if (xCarros[1] < -50){
+    xCarros[1] = 600
+  }
+  if (xCarros[2] < -50){
+    xCarros[2] = 600
+  }
+}
+```
+<p>Ligaremos o jogo e ele estará funcionando igualmente, e conseguimos melhorar muito nosso código sem alterar o comportamento dele!</p>
