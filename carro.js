@@ -12,16 +12,14 @@ function mostraCarro() {
 }
 
 function movimentaCarro() {
-    xCarros[0] -= velocidadeCarros[0];
-    if (xCarros[0] < -100) {
-        xCarros[0] = 600;
+    for (i = 0; i < imagemDosCarros.length; i++) {
+        xCarros[i] -= velocidadeCarros[i];
+        if (passouTodaATela(xCarros[i])) {
+            xCarros[i] = 600;
+        }
     }
-    xCarros[1] -= velocidadeCarros[1];
-    if (xCarros[1] < -100) {
-        xCarros[1] = 600;
-    }
-    xCarros[2] -= velocidadeCarros[2];
-    if (xCarros[2] < -100) {
-        xCarros[2] = 600;
-    }
+}
+
+function passouTodaATela(xCarro) {
+    return xCarro < -50
 }

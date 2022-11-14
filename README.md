@@ -785,3 +785,92 @@ function mostraCarro(){
 <p>Como ele está desenhando isso várias vezes, os carrinhos estão sendo desenhados devagar, com bug. Tiraremos o print(), pois não precisaremos mais dele. Só servia para vermos que as repetições estavam sendo feitas. Quando dermos "Play" novamente, os três carros aparecerão passando na tela com o uso do for para repetir o código e diminuir o número de linhas semelhantes.</p>
 
 <p>Conseguimos o mesmo resultado utilizando ainda menos códigos. Na sequência, usaremos o for também nas outras funções.</p>
+
+>Melhorando o Código
+
+<p>Refatoramos nossa função que mostra os carros. Vamos refatorar também a função que movimenta os carros.</p>
+
+<p>A diferença entre as três linhas da função movimentaCarro() é apenas o índice. Então resolveremos isso com um for, da mesma forma que fizemos com mostraCarros. Esse for terá um valor que se alterará a cada loop. Colocaremos a variável de contador, i, com o valor 0 para a primeira repetição, 1 na segunda e 2 na terceira.</p>
+
+<p>A condição será que enquanto i for menor do que imagemCarros.length, a cada repetição, aumentará um valor no contador i = i + 1.</p>
+
+```
+function movimentaCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+        xCarros[i] -= velocidadeCarros[i];
+        }
+}
+```
+
+<p>Vamos rodar o jogo e os três carros passarão da mesma forma, sem termos mais as linhas de código duplicadas.</p>
+
+<p>Agora faremos o mesmo para a função voltaPosicaoInicialCarro(). Temos as posições 0, 1 e 2 para cada um dos carros, e criaremos um for exatamente da mesma forma que fizemos na função anterior, com a condição de que enquanto i for menor do que o tamanho dos ítens da lista imagemCarros, i aumentará um valor. É importante dar um "Tab" para que o código no corpo do for, entre as chaves, fique bem indentado.</p>
+
+<p>Então poderemos usar apenas uma repetição do if com o i no lugar do valor da posição de xCarros na lista.</p>
+
+<p>Uma questão a ser levantada nesse momento é: o que a função voltaPosicaoInicialDoCarro() faz? Ela retorna os carros para posição inicial. Porém temos um if fazendo uma verificação se o xCarros de uma posição é menor do que "-50", ou seja, se o carro já passou toda a tela. Sendo assim, podemos melhorar esse código abstraindo isso para uma outra função.</p>
+
+<p>Criaremos uma outra função que verifique se o carro passou toda a tela, e o carro terá passado toda a tela se xCarros[i] < - 50. Precisamos do resultado, ou do retorno dessa função. Utilizaremos a palavra return para isso.</p>
+
+<p>Chamaremos a função passouTodaATela dentro do corpo de voltaPosicaoInicialDoCarro, com um if, pois diremos que se xCarros[i] passou por toda a tela, xCarros[i] = 60. '</p>
+
+<p>Por fim, no retorno de passouTodaATela, sendo xCarros < -50, o código continuará executando outras operações.</p>
+
+```
+function voltaPosicaoInicialDoCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+        if(passouTodaATela(xCarros[i])){
+                xCarros[i] = 600;
+        }
+    }
+}
+
+function passouTodaATela(xCarro){
+    return xCarro < - 50;
+}
+```
+
+<p>Vamos rodar e o funcionamento do jogo continuará o mesmo.</p>
+
+<p>Portanto, o que fizemos nesse vídeo foi melhorar nosso código abstraindo responsabilidades que faziam-no parecer muito repetitivo.</p>
+
+<p>Na função voltaPosicaoInicialDoCarro criamos um for no código pela terceira vez e verificamos se xCarros[i] passou toda a tela, xCarros nessa situação pegará o índice do carro que ele estiver contando a partir do i, que pode ser o carro 1, o carro 2 ou o carro 3 nas posições 0, 1 ou 2.</p>
+
+<p>Se ele passou toda a tela, queremos que xCarros[i], ou seja, nesse mesmo índice, retorne a "600". Tudo estará funcionando corretamente, pois os carros passam e depois voltam a aparecer.</p>
+
+<p>Temos o mesmo código de antes, quando tínhamos aquelas 9 variáveis, mas de modo muito mais sofisticado: temos três listas, refatoramos os códigos para evitar que muitas linhas ficassem duplicadas, e apenas um image que executa 3 vezes, por ter um laço de repetição para isso. Também temos uma função movimentaCarros() que cria a movimentação do carro por meio da repetição e outra para o carro retornar à posição original, com outra verificação se ele passou toda a tela.</p>
+
+<p>Até a leitura do código ficou mais simplificada, com if(passouTodaATela(xCarros[i])), pois entendemos que significa que se o carro correspondente ao índice passou toda a tela, ele voltará para "600".</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600];
+let yCarros = [40, 96, 150]; 
+let velocidadeCarros = [2, 2.5, 3.2];
+
+function mostraCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+  image(imagemCarros[i], xCarros[i], yCarros[i], 50, 40);
+  }
+}
+
+function movimentaCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+        xCarros[i] -= velocidadeCarros[i];
+        }
+}
+
+function voltaPosicaoInicialDoCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+        if(passouTodaATela(xCarros[i])){
+                xCarros[i] = 600;
+        }
+    }
+}
+
+function passouTodaATela(xCarro){
+    return xCarro < - 50;
+}
+
+```
