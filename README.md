@@ -690,4 +690,98 @@ function voltaPosicaoInicialDoCarro(){
   }
 }
 ```
+> Laços de repetição
+
 <p>Ligaremos o jogo e ele estará funcionando igualmente, e conseguimos melhorar muito nosso código sem alterar o comportamento dele!</p>
+
+<p>Conseguimos melhorar nosso código usando listas, mas ainda temos muito código duplicado.</p>
+
+<p>Na função que mostra os carros temos na primeira linha do corpo a imagem do primeiro carro e o índice do carro tanto para o "x" quanto para o "y" do carro. Na segunda linha, há a imagem do carro 2 e o "x" e "y" do carro no índice 1. O mesmo acontecerá na terceira linha para a imagem 3.</p>
+
+<p>Estamos criando um padrão para nosso código, mas a imagem do carro não está padronizada. Há 3 variáveis diferentes para as imagens dos carros e poderíamos colocar todas elas dentro de uma lista, para escrevê-las no código de acordo com um índice também.</p>
+
+<p>Na aba do "project folder", vamos em "imagens.js" e criaremos uma lista que chamaremos de imagemCarros. Atribuiremos colchetes a ela para indicar que se trata de uma lista e dentro da lista colocaremos as três variáveis referentes às imagens.</p>
+
+```
+// imagens do jogo
+
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+let imagemCarro2;
+let imagemCarro3;
+
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+  imagemCarro2 = loadImage("imagens/carro-2.png");
+  imagemCarro3 = loadImage("imagens/carro-3.png");
+    imagemCarros = [imagemCarro, imagemCarro2, imagemCarro3];
+}
+```
+<p>Voltaremos para "carros.js" e faremos as devidas substituições na função mostraCarro, padronizando o código, já que as imagens dos carros serão referenciadas a partir do índice, assim como as posições "x" e "y" :</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600];
+let yCarros = [40, 96, 150]; 
+let velocidadeCarros = [2, 2.5, 3.2];
+
+function mostraCarro(){
+  image(imagemCarros[0], xCarros[0], yCarros[0], 50, 40);
+  image(imagemCarros[1], xCarros[1], yCarros[1], 50, 40);
+  image(imagemCarros[2], xCarros[2], yCarros[2], 50, 40);
+}
+
+function movimentaCarro(){
+  xCarros[0] -= velocidadeCarros[0];
+  xCarros[1] -= velocidadeCarros[1];
+  xCarros[2] -= velocidadeCarros[2];
+}
+
+function voltaPosicaoInicialDoCarro(){
+  if (xCarros[0] < -50){
+    xCarros[0] = 600
+  }
+  if (xCarros[1] < -50){
+    xCarros[1] = 600
+  }
+  if (xCarros[2] < -50){
+    xCarros[2] = 600
+  }
+}
+
+```
+<p>Vamos executar e apareceram os três carros, nosso jogo está funcionando normalmente. Temos um padrão, mas continuamos com muitas linhas de código muito semelhantes. Na mesma função mostraCarro(), a diferença entre as três linhas responsáveis por desenhar os carros na tela é apenas o índice.</p>
+
+<p>Será que existe alguma forma de executar esses códigos e o computador já alterar, para não precisarmos repetir as posições?</p>
+
+<p>Existe. Uma das formas de pedir para nosso computador repetir instruções de código que queremos passar é por meio da palavra for. Assim como usamos parênteses no if, também usaremos no for, passando parâmetros para ele.</p>
+
+<p>Queremos repetir a linha da ìmage() dentro de mostraCarro(). O primeiro parâmetro que passaremos para o for será uma variável para indicar que haverá repetição. Criaremos uma variável dentro dele que chamaremos de i e atribuiremos o valor "0" a ela. Depois precisamos falar quantas vezes queremos repetir esse i. Temos 3 elementos na lista, 3 imagens do carro. Será que podemos pedir para que seja criada a imagem do carro já com a quantidade de elementos da lista?</p>
+
+<p>A forma de fazer isso será passar como parâmetro a condição de repetir o código enquanto o i for menor do que a quantidade de imagens que temos dos carros, o que podemos acessar por meio da palavra length. Utilizando essa palavra, conseguimos saber quantos dados temos dentro da lista.</p>
+
+<p>Colocaremos ponto e vírgula e deixaremos um espaço referente ao terceiro parâmetro. Começamos com o i = 0, depois, o código perguntará a quantidade de carro que temos com i < imagemCarros.length. "0" é menor do "3", é verdade, então ele começará uma instrução, por isso abriremos colchetes para indicar que o que estiver dentro dos colchetes será executado. As 3 imagens irão para o corpo desse for.</p>
+
+<p>A cada repetição do for precisamos mudar o valor de i. Na primeira repetição, ele deverá ser "0" para a imagem do carro, a posição de "x" e a de "y". 'Na segunda, ele deverá ser "1". Por isso, devemos pegar o valor de i e somar com 1. Como ainda temos um terceiro parâmetro para passar, vamos colocá-lo como i = i + 1. Então na segunda repetição o i valerá "1" nos três aspectos. Na terceira vez que ele for repetir, o i já valerá "1", e a operação realizada será i = 1+1 ou seja, "2". "2" é menor do que "3", então o valor de i será substituído.</p>
+
+<p>Agora a mágica acontece. Removeremos as duas das de dentro do for, deixando apenas uma, que desenhará os três carros. Então teremos criado um for, criado uma variável i, e feito uma comparação com a variável para que enquanto ela, que começa com "0", for menor do que a quantidade de imagemCarros, os carros serão desenhados.</p>
+
+<p>Criaremos um print() dentro do for apenas para visualizar isso acontecendo. Passaremos entre aspas duplas "O valor do i nesta repetição é " + i.</p>
+
+```
+function mostraCarro(){
+    for(let i = 0; i < imagemCarros.length; i = i + 1){
+  image(imagemCarros[i], xCarros[i], yCarros[i], 50, 40);
+    print("O valor do i nesta repetição é " + i)
+    }
+}
+```
+<p>Vamos executar o código e o código fará a repetição as três vezes, por meio do processo do valor de i ser "0", depois ser "1" e depois "2", e não poder ser "3" porque precisa ser menor do que a quantidade de dados de imagemCarros.</p>
+
+<p>Como ele está desenhando isso várias vezes, os carrinhos estão sendo desenhados devagar, com bug. Tiraremos o print(), pois não precisaremos mais dele. Só servia para vermos que as repetições estavam sendo feitas. Quando dermos "Play" novamente, os três carros aparecerão passando na tela com o uso do for para repetir o código e diminuir o número de linhas semelhantes.</p>
+
+<p>Conseguimos o mesmo resultado utilizando ainda menos códigos. Na sequência, usaremos o for também nas outras funções.</p>
