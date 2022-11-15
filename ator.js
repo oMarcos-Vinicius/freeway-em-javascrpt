@@ -1,7 +1,7 @@
 // Código do Ator
 yAtor = 366;
 xAtor = 120;
-
+colidiu = false;
 
 
 function mostrarAtor() {
@@ -20,5 +20,15 @@ function movimentaAtor() {
     }
     if (keyIsDown(LEFT_ARROW)) {
         xAtor -= 3;
+    }
+}
+
+function verificaColisao() {
+    //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+    for (i = 0; i < imagemDosCarros.length; i++) {
+        colidiu = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 30);
+        if (colidiu) {
+            yAtor = 366;
+        }
     }
 }

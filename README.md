@@ -874,3 +874,121 @@ function passouTodaATela(xCarro){
 }
 
 ```
+<h1>Módulo 4: Colisão + Carros e Pontos</h1>
+
+>Criando colisão
+
+<p>Nosso jogo está ficando muito legal, mas há um ponto muito importante que podemos melhorar nele.</p>
+
+<p>Quando ligamos o jogo e movimentamos a vaquinha, não acontece nada se colidirmos com um dos carros. Conseguimos atravessar a rua como se nosso personagem fosse invisível e pudesse atravessar paredes, e não é o que queremos que aconteça.</p>
+
+<p>Sempre que o personagem tentar atravessar a rua e colidir com um carro, ele deverá voltar para a posição inicial. Assim nosso jogo ficará muito mais desafiador.</p>
+
+<p>A implementação da colisão será algo comum no p5. Vários outros projetos utilizam a detecção de colisão entre objetos, então alguém já solucionou esse problema e compartilhou a solução encontrada. Pegaremos essa solução e vamos incorporá-la no nosso projeto da mesma forma que fizemos na parte 1 do curso de Jogos Clássicos, com o Pong, em que pegamos uma biblioteca e a implementamos no nosso desenvolvimento.</p>
+
+<p>Para fazer isso, vamos na https://editor.p5js.org/, clicaremos em Help & Feedback > Reference > Libraries". Scrollando um pouco essa página de bibliotecas, acharemos o link para "p5.collide2d". Clicando nele será aberto o GitHub com o código que vamos incorporar no nosso projeto, "p5.collide2d.js". Faremos o download desse código zipado e descompactaremos o arquivo para aproveitá-lo no nosso projeto. Poderemos descartar o .zip.</p>
+
+<p>No p5, clicaremos na seta para baixo, ao lado de "project folder" e clicaremos em "Add file" para adicionar um arquivo. Clicaremos no espaço da janela que se abrirá e selecionaremos "p5.collide2d.js" para abri-lo. Clicando em "Open", ele aparecerá como o último arquivo de nossa lista na aba lateral esquerda da tela.</p>
+
+<p>Para executar de fato esse código dentro de nosso projeto, vamos em "index.html" e assim como fizemos para a imagem, o ator e o carro, faremos também para nosso arquivo: adicionaremos uma linha de script src="p5.collide2d.js">/script>.</p>
+
+<p>Ligaremos o jogo para conferir se tudo estará funcionando e aparecerá "p5.collide2d" no nosso console, ou seja, o código já estará disponível para a nossa utilização. A mensagem aparece no terminal porque na linha 8 do código há um console.log() que servirá apenas para conferirmos se ele estará incluso no projeto. Poderemos removê-lo, pois não precisamos mais que nenhuma mensagem escrita seja exibida, deixaremos nosso console limpo.</p>
+
+<p>Já temos nossa colisão, será que ela estará funcionando? Não, pois precisamos passar os parâmetros para essa função. Não seria tão simples, mas o procedimento não será difícil também. Vamos ao código do ator e criaremos uma função para verificar se há colisão, verificaColisao(). No corpo da função escreveremos o código para a verificação.</p>
+
+<p>Se observarmos as formas, nossa vaquinha será como um círculo, e os carros, retângulos. Por isso, buscaremos no GitHub da colisão a função referente e será collideRectCircle(). Clicaremos no link referente a ela, e veremos os parâmetros a ser utilizados para que funcione. Vamos copiá-los e colocá-los no corpo de verificaColisao() em forma de comentário, apenas para podermos visualizá-los.</p>
+
+<p>Na documentação desse código é informado que o primeiro passo dele será a criação de uma variável para saber se está colidindo ou não, que é iniciada com false. No nosso caso faz sentido, pois nosso personagem parte de baixo da tela do jogo, e não está colidindo com ninguém ainda.</p>
+
+<p>Geraremos a variável colisao e atribuiremos a ela o valor false, já que não há colisão no início.</p>
+
+<p>Temos três carros e um personagem. Precisamos verificar a colisão nos três. Será que precisamos ver as posições "x" e "y" de cada carro e escrever tudo isso? Não, podemos utilizar o for, pois no código do carro já temos "x" e "y" de todos eles em lista. Assim, trabalhar com listas mais uma vez tornou o desenvolvimento do nosso código mais fácil.</p>
+
+<p>Faremos um for, uma vez que já aprendemos a trabalhar com ele. Nos parâmetros criaremos a variável i, depois diremos que enquanto i for menor que a quantidade de imagens que temos, será somado um valor ao i a cada iteração.</p>
+
+<p>Dentro do for, vamos verificar se há colisão. Precisamos lembrar que nossa variável de colisão está com valor falso e quem vai verificar de fato se acontece a colisão é a função collideRectCircle(), então escreveremos que colisao será igual ao retorno da função.</p>
+
+<p>Precisaremos passar como parâmetro para essa função o "x1" e o "y1" do carro. "x1" e "y1" serão relacionados ao retângulo. Passaremos xCarros[i] para que seja feita a verificação dos carros nos índices 0, 1 e 2, ou seja, os três carros. Depois, yCarros[i] e depois o largura e altura dos carros.</p>
+
+<p>Vamos conferi-los no código que já escrevemos e quando desenhamos nosso carro, passamos os valores "50" e "30" como largura e altura. Geraremos uma variável comprimentoCarro com o valor "50" e outra alturaCarro = 40. Então na image da função mostraCarros() usaremos essas variáveis no lugar dos valores, como fazíamos anteriormente.</p>
+
+<p>Então, no código do carro, teremos:</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600, 600, 600, 600];
+let yCarros = [40, 96, 150, 210, 270, 318];
+let velocidadeCarros = [2, 2.5, 3.2, 5, 3.3, 2.3];
+let comprimentoCarro = 50;
+let alturaCarro = 40;
+
+function mostraCarro(){
+  for (let i = 0; i < imagemCarros.length; i++){
+    image(imagemCarros[i], xCarros[i], yCarros[i], comprimentoCarro, alturaCarro);
+  }
+}
+```
+<p>O jogo funcionará do mesmo modo. Então voltaremos ao código do nosso ator e continuaremos passando os parâmetros da função collideRectCircle(). Veremos no nosso comentário, embaixo da função verificaColisao(), o código da colisão solicita "width", nosso comprimentoCarro, e "heigth", a alturaCarro.</p>
+
+<p>Teremos mais três parâmetros: "x" e "y" do círculo e o diâmetro dele. "x" será xAtor, "y", yAtor, e o diâmetro será "30". Porém, passaremos um valor menor para termos uma detecção melhor da colisão. Passaremos como "15" para testar.</p>
+
+<p>Agora, vamos verificar com if. Iniciamos a colisão com falso. Ela deverá nos retornar um valor nessa condição que será um verdadeiro ou falso para afirmar se existiu a colisão ou não. Se houver colisão, imprimiremos "Colidiu".</p>
+
+<p>Para executar a função, vamos em "sketch.js" e colocaremos verificaColisao() no corpo da função draw().</p>
+
+```
+//código do ator
+
+let xAtor = 100;
+let yAtor = 366;
+let colisao = false;
+
+
+function mostraAtor(){
+  image(imagemDoAtor, xAtor, yAtor, 30, 30);
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      print("Colidiu")
+    }
+  }
+}
+
+```
+<p>Daremos um "Play" e a princípio não há colisão. Posicionaremos nosso personagem na primeira faixa para aguardar o primeiro carro colidir nele. Quando ele bater na vaquinha, aparecerá a mensagem "Colidiu" no terminal. Testaremos para os três carros nos posicionando nas três faixas e o efeito será o mesmo.</p>
+
+<p>Porém, no jogo nós não vamos mostrar uma imagem no console quando os carros colidirem no personagem. Nessa situação, nosso personagem voltará para a posição inicial dele.</p>
+
+<p>Sendo assim, sempre que houver uma colisão chamaremos uma nova função chamada colidiu(). Dentro dela, vamos retornar o yAtor para a posição inicial dele, "366",</p>
+
+```
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      colidiu();
+    }
+  }
+}
+
+function colidiu(){
+  yAtor = 366;
+}
+
+```
+<p>Ligaremos o jogo, aguardaremos a colisão e o ator voltará para sua posição inicial. Vamos testar para todos os carros e funcionará. Então, graças ao for e a lista que estamos utilizando, temos a colisão verificando todos os carros de uma vez.</p>

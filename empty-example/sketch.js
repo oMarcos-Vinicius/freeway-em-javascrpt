@@ -11,4 +11,5 @@ function draw() {
     mostraCarro();
     movimentaCarro();
     movimentaAtor();
+    verificaColisao();
 }
