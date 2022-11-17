@@ -992,3 +992,244 @@ function colidiu(){
 
 ```
 <p>Ligaremos o jogo, aguardaremos a colisão e o ator voltará para sua posição inicial. Vamos testar para todos os carros e funcionará. Então, graças ao for e a lista que estamos utilizando, temos a colisão verificando todos os carros de uma vez.</p>
+
+>Carros em todas as pistas
+
+<p>Agora assim que nosso personagem do jogo colide com carros de qualquer faixa, voltamos para nossa posição inicial.</p>
+
+<p>Porém podemos alterar alguns pontos no nosso jogo para deixá-lo mais completo.</p>
+
+<p>Nas três primeiras faixas da nossa rodovia, há carros passando. Entretanto, nas faixas 4, 5 e 6, não. Vamos inserir carros em todas as faixas.</p>
+
+<p>Podemos inserir as mesmas imagens dos carros que já carregamos na nossa lista imagemCarros, no arquivo "imagens.js". Mais uma vez passaremos imagemCarro, imagemCarro2 e imagemCarro3. Estaremos reaproveitando os arquivos de imagens que já carregamos.</p>
+
+```
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+  imagemCarro2 = loadImage("imagens/carro-2.png");
+  imagemCarro3 = loadImage("imagens/carro-3.png");  
+  imagemCarros = [imagemCarro, imagemCarro2, imagemCarro3, imagemCarro, imagemCarro2, imagemCarro3]
+
+```
+<p>Há 6 dados de imagens na nossa lista de imagens de carros nesse momento. Passaremos a posição inicial de todos os carros em "carros.js". Todos os carros deverão partir da posição "600" de "x". Precisaremos passar também o "y" dos carros.</p>
+
+<p>Não podemos chutar os valores para os carros aparecerem em posições diferentes, pois não faria sentido. Já teremos alguns valores preparados para colocar nossos carros de forma mais rápida. Assim não vamos ter que testar a altura de cada carro em cada faixa e usaremos os valores selecionados previamente.</p>
+
+<p>Para o "y" da faixa 4, colocaremos o valor "210". para o carro 5, colocaremos "270" e para o 6, "318".</p>
+
+<p>Para finalizar e conseguirmos de fato visualizar todos os carros, passaremos a velocidade dos carros. O 4 será bastante rápido, "5". O seguinte será um pouco mais lento, "3.3". O carro da primeira faixa, terá velocidade "2.3".</p>
+
+<p>Recapitulando, passamos as mesmas imagens para a lista imagemCarros dando outra referência para elas. Em "carros.js", colocamos os valores para cada carro, tanto na posição "x", quanto na lista "y" quanto na lista da velocidade dos carros.</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600, 600, 600, 600];
+let yCarros = [40, 96, 150, 210, 270, 318];
+let velocidadeCarros = [2, 2.5, 3.2, 5, 3.3, 2.3];
+let comprimentoCarro = 50;
+let alturaCarro = 40;
+```
+<p>Vamos rodar o código e assim que executamos, vemos todos os carros passando em todas as faixas. A padronização do jogo fica a critério, para isso bastará mudar os valores da velocidade para cada carro conforme a preferência.</p>
+
+<p>Se ainda estivéssemos trabalhando com variáveis para os carros, se tínhamos 3 variáveis para cada carro, agora que temos 6 carros seriam ainda mais variáveis e muitos códigos semelhantes replicados. Com nossa resolução, fizemos o loop para mostrar, movimentar e fazer os carros retornarem à posição inicial, tornando muito mais fácil trabalhar com o código.</p>
+
+<p>Outro ponto que podemos alterar é o nosso for. Nos parâmetros do for estamos declarando a variável i e atribuindo o valor "0" a ela, passando a condição de que se o i for menor do que a quantidade de itens da lista imagemCarros, o valor de i aumentará em "1" valor, ou i = i+ 1. Esse código do i ganhar mais um valor será necessário, mas podemos escrevê-lo de outra forma com o mesmo resultado. Substituiremos i = i + 1 por i++ em todos os trechos em que ele aparecer.</p>
+
+```
+//código do carro
+
+let xCarros = [600, 600, 600, 600, 600, 600];
+let yCarros = [40, 96, 150, 210, 270, 318];
+let velocidadeCarros = [2, 2.5, 3.2, 5, 3.3, 2.3];
+let comprimentoCarro = 50;
+let alturaCarro = 40;
+
+function mostraCarro(){
+  for (let i = 0; i < imagemCarros.length; i++){
+    image(imagemCarros[i], xCarros[i], yCarros[i], comprimentoCarro, alturaCarro);
+  }
+}
+
+function movimentaCarro(){
+  for (let i = 0; i < imagemCarros.length; i++){
+    xCarros[i] -= velocidadeCarros[i];
+  }
+}
+
+function voltaPosicaoInicialDoCarro(){
+  for (let i = 0; i < imagemCarros.length; i++){
+    if (passouTodaATela(xCarros[i])){
+      xCarros[i] = 600;
+    }
+  }
+}
+
+function passouTodaATela(xCarro){
+  return xCarro < - 50;
+}
+```
+<p>Melhoramos a experiência do nosso jogo colocando um carro em cada faixa de maneira bastante simples e modificamos a forma de escrever i = i+1, substituindo por i++, mais sucinto. Ainda teremos o mesmo funcionamento após as modificações.</p>
+
+>Criando os pontos do jogo
+
+<p>Quando tentamos atravessar até o outro lado da rodovia com o personagem do nosso jogo e conseguimos, nada acontece. No jogo original, porém, sempre que o personagem chegava ao outro lado, marcava um ponto.</p>
+
+<p>Vamos implementar os pontos no jogo para motivar o usuário no nosso desafio. Caso o personagem colida com um carro, perderemos esses pontos.</p>
+
+<p>A primeira modificação que faremos será no código do ator. Criaremos um texto para marcarmos os pontos. Mas eles precisam estar armazenados em algum lugar da memória do computador. Sempre que iniciamos o jogo, ainda não temos nenhum ponto. Ganharemos um ponto a cada vez que conseguimos chegar do outro lado, por isso vamos armazenar esses pontos na memória.</p>
+
+<p>Para o armazenamento, criaremos uma variável chamada meusPontos e vamos atribuir a ela o valor inicial "0'. Devemos mostrar esses pontos na tela do jogo,então criaremos uma função incluiPontos(). utilizaremos no corpo da função a palavra text(). A função text() terá dois parâmetros fundamentais: o que queremos exibir, a posição "x" e a posição "y" desse texto.</p>
+
+<p>Colocaremos em primeiro lugar meusPontos como um parâmetro. Em seguida,vamos dividir a largura da tela em 5 partes, da direita para a esquerda e diremos que ele deve ficar na posição "5". Podemos ajustar essa posição com a do nosso personagem. Para finalizar, passaremos a altura "60", um valor já testado anteriormente.</p>
+
+<p>Vamos na função "sketch.js" em que todas as funções do nosso jogo acontecem e incluiremos incluiPontos() na função draw().</p>
+
+```
+//código do ator
+let xAtor = 100;
+let yAtor = 366;
+let colisao = false;
+let meusPontos = 0;
+
+function mostraAtor(){
+  image(imagemDoAtor, xAtor, yAtor, 30, 30);
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+    }
+  }
+}
+
+function voltaAtorParaPosicaoInicial(){
+  yAtor = 366;
+}
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+    }
+  }
+}
+
+function colidiu(){
+  yAtor = 366;
+}
+
+function incluiPontos(){
+  text(meusPontos, width / 5, 60);
+}
+```
+
+<p>Agora, vamos ligar nosso jogo e aparecerá um "0" mal posicionado na nossa tela. A posição de "x" ficou adequada. Então, vamos jogar nosso personagem um pouco mais para a esquerda, alinhando-o aos pontos. Quanto menor for o"x", mais próximo ele estará da esquerda. Então usaremos "85" no valor de xAtor. .</p>
+
+<p>O "0" referente aos pontos está muito pequeno. Vamos então refinar o texto alterando o tamanho dele. usaremos a propriedade textSize() e passaremos o valor de "25".</p>
+
+<p>O tamanho melhorará, mas esse número ainda estará no meio da pista. Precisamos colocá-lo mais para cima. Vamos utilizar uma propriedade que pega o centro do texto e poderá ficar mais fácil para posicionar, textAlign(), e passaremos uma propriedade com valor constante, com todas as letras maiúsculas e chamaremos de CENTER.'</p>
+
+<p>Precisamos alterar nosso valor de "y" também, pois o "0" aparece muito para baixo. Diminuiremos a posição de "60" para "27", um valor que pelos testes parecerá mais apropriado quando fizermos nossos testes.</p>
+
+<p>No jogo original, o jogo tem uma cor diferente. Vamos procura uma tabela de códigos de cores HTML e escolheremos a cor Orange. Os códigos de cores RGB terão valores com três números, de 0 a 255. Os valores dessas. O desse tem de laranja escolhido é 155, 65, 0, mas testaremos e o texto ficará muito escuro para ser bem visualizado em nosso jogo. Temos a possibilidade de alterar as cores alterando esses três valores ou três propriedades.</p>
+
+<p>Passaremos a usar 255, 240, 60 e conseguiremos um destaque melhor. Também é possível escolher usar outra cor no jogo.</p>
+
+<p>Agora sempre que o personagem conseguir chegar ao outro lado, vamos marcar um ponto. Esse valor de "0", portanto, precisa virar "1". Podemos criar uma outra função para marcar isso, e chamaremos essa função de marcaPonto.</p>
+
+<p>Precisamos verificar a altura do nosso personagem, pois será quando ela atingir a altura da tela que corresponde ao outro lado da rodovia que marcaremos pontos.</p>
+
+<p>Na função que mostra nosso ator, colocaremos um print(Ator) para ver no nosso console a altura da vaquinha. Quando ligarmos o jogo, ficará aparecendo no terminal os valores referentes à posição, e poderemos conferir que o valor "15" marca o topo da tela. Quando nos movemos ainda mais para cima, os valores diminuem, então podemos concluir que os pontos serão marcados quando atingimos uma posição menor do que 15.</p>
+
+<p>Faremos uma condicional if dizendo que se o valor de yAtor for menor do que "15" a função de marcar pontos será chamada. Sendo assim, a variável meusPontos ganhará um valor por meio de meusPontos += 1</p>
+
+```
+function incluiPontos(){
+  textAlign(CENTER);
+  textSize(25);
+  fill(color(255, 240, 60))
+  text(meusPontos, width / 5, 27);
+}
+
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+  }
+}
+```
+<p>Podemos apagar o print da função mostraAtor(), uma vez que não precisamos mais dele.</p>
+
+<p>Vamos executar o jogo e quando conseguirmos atravessar a rua com o personagem, nada acontecerá. O que aconteceu foi que criamos nossa função, mas ela não está sendo executada. Temos que executá-la no "sketch.js", senão temos uma função que não está sendo usada por ninguém e não verificamos o yAtor.</p>
+
+<p>Incluiremos marcaPonto() à função draw() do sketch e ela fará a verificação da altura da vaquinha.</p>
+
+<p>Testando novamente, quando chegarmos ao outro lado com a vaquinha o placar vai começar a marcar pontos sem pontos sem parar. Não é o que deve acontecer, quando chegarmos do outro lado e marcamos um ponto, voltaremos para a posição inicial.</p>
+
+<p>Já fizemos o mesmo em outro trecho do código. Quando existe uma colisão entre ator e carro, é chamada uma função chamada colidiu() que faz o yAtor voltar ao estado inicial, ou seja, o personagem volta para a parte superior da tela, como no começo do jogo.</p>
+
+<p>Podemos melhorar o nome dessa função colidiu() para voltaAtorParaPosicaoInicial(). Se marcarmos um ponto, essa função também será chamada agora. Assim, reutilizamos uma função no código.</p>
+
+```
+//código do ator
+let xAtor = 85;
+let yAtor = 366;
+let colisao = false;
+let meusPontos = 0;
+
+function mostraAtor(){
+  image(imagemDoAtor, xAtor, yAtor, 30, 30);
+}
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yAtor += 3;
+  }
+}
+
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+    }
+  }
+}
+
+function voltaAtorParaPosicaoInicial(){
+  yAtor = 366;
+}
+
+function incluiPontos(){
+  textAlign(CENTER);
+  textSize(25);
+  fill(color(255, 240, 60))
+  text(meusPontos, width / 5, 27);
+}
+
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+    voltaAtorParaPosicaoInicial();
+  }
+}
+```

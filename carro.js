@@ -1,6 +1,6 @@
 //Códigos do Carro
 
-let xCarros = [600, 600, 600, -100, -100, -100];
+let xCarros = [650, 650, 650, -100, -100, -100];
 let yCarros = [42, 96, 150, 210, 270, 318];
 let comprimentoCarro = 50;
 let alturaCarro = 40;
@@ -15,10 +15,14 @@ function mostraCarro() {
 
 function movimentaCarro() {
     for (i = 0; i < imagemDosCarros.length; i++) {
+        // xCarros[i] -= velocidadeCarros[i];
+        // if (passouTodaATela(xCarros[i])) {
+        //     xCarros[i] = 600;
+        // }
         if (i >= 3) {
             xCarros[i] += velocidadeCarros[i];
             if (passouTodaATela(xCarros[i])) {
-                xCarros[i] = -50;
+                xCarros[i] = -100;
             }
         } else {
             xCarros[i] -= velocidadeCarros[i];
@@ -30,5 +34,5 @@ function movimentaCarro() {
 }
 
 function passouTodaATela(xCarro) {
-    return xCarro < -50 || xCarro > 650;
+    return xCarro < -100 || xCarro > 650;
 }
