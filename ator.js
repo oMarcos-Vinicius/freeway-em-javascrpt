@@ -11,24 +11,35 @@ function mostrarAtor() {
 
 function movimentaAtor() {
     if (keyIsDown(UP_ARROW)) {
+        //if (podeSeMover()) {
         yAtor -= 3;
+        //}
     }
     if (keyIsDown(DOWN_ARROW)) {
-        yAtor += 3;
+        if (podeSeMover()) {
+            yAtor += 3;
+        }
     }
     if (keyIsDown(RIGHT_ARROW)) {
+        //if (podeSeMover()) {
         xAtor += 3;
+        //}
     }
     if (keyIsDown(LEFT_ARROW)) {
+        //if (podeSeMover()) {
         xAtor -= 3;
+        //}
     }
 }
 
 function verificaColisao() {
     //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
     for (i = 0; i < imagemDosCarros.length; i++) {
-        voltaPosicaoInicial = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 30);
+        voltaPosicaoInicial = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15);
         if (voltaPosicaoInicial) {
+            if (pontosMaiorQueZero()) {
+                meusPontos--
+            }
             yAtor = 366;
         }
     }
@@ -46,4 +57,12 @@ function marcaPonto() {
         meusPontos++
         yAtor = 366;
     }
+}
+
+function pontosMaiorQueZero() {
+    return meusPontos > 0
+}
+
+function podeSeMover() {
+    return yAtor < 366
 }

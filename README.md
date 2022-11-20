@@ -1233,3 +1233,158 @@ function marcaPonto(){
   }
 }
 ```
+
+<h1>Módulo 5: Adicionando sons e pontos</h1>
+
+>Perdendo pondos
+
+<p>Estamos marcando pontos sempre que chegamos até o outro lado com nosso personagem.</p>
+
+<p>No entanto, seria ainda mais desafiador se a cada vez que colidíssemos com algum carro, perdêssemos um ponto também.</p>
+
+<p>No nosso código que verifica se ocorreu uma colisão, voltamos para o ator principal e perdemos um ponto. Então, chamaremos meusPontos -= 1.</p>
+
+```
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+            meusPontos -= 1;
+    }
+  }
+}
+```
+<p>Vamos testar. Por duas vezes chegaremos ao outro lado e ganharemos um ponto. Deixaremos um carro colidir no personagem e perderemos um ponto. Vamos testar de novo, perder mais um e ficar com "0". Porém, se o ator colidir outra vez ou outras vezes com o carro, a pontuação ficará negativa.</p>
+
+<p>Não vamos deixar os pontos ficarem negativos. Por isso verificaremos se os pontos são maiores do que "0". Caso contrário, o ponto não será removido. Criaremos uma função para saber se podemos ou não tirar esses pontos.</p>
+
+<p>Inicialmente, criaremos um if com meusPontos > 0 nos parâmetros. No corpo do if, faremos a retirada dos pontos com meusPontos -=1, mas só sobe a condição estabelecida de serem maiores do que "0" quando houver a colisão.</p>
+
+```
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+        if (meusPontos > 0){
+        meusPontos -=1;
+    }
+    }
+  }
+}
+```
+
+<p>Vamos testar e marcar um ponto. Quando a colisão acontecer, perderemos esse ponto, mas se ela acontecer outras vezes quando o placar estiver em "0", ele permanecerá assim.</p>
+
+<p>Nossa função verificaColisao() tem mais de uma responsabilidade: ela está verificando se tem a colisão ou não e chamando outras funções, e temos um if verificando se os pontos do placar são maiores do que "0". Podemos remover esse conteúdo para outra função para o código ficar mais organizado. Vamos remover o meusPontos > 0 com "Ctrl + X" e faremos if(PontosMaiorQueZero()). Por último no código criaremos essa função e chamaremos meusPontos > 0 como retorno.</p>
+
+<p>Nosso código ficou muito mais claro para ler e entender que se os pontos estiverem com valor maior que 0, um ponto será perdido se ocorrer colisão.</p>
+
+```
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+
+    }
+  }
+}
+
+function voltaAtorParaPosicaoInicial(){
+  yAtor = 366;
+}
+
+function incluiPontos(){
+  textAlign(CENTER);
+  textSize(25);
+  fill(color(255, 240, 60))
+  text(meusPontos, width / 5, 27);
+}
+
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+    voltaAtorParaPosicaoInicial();
+  }
+}
+
+function pontosMaiorQueZero(){
+    return meusPontos > 0;
+}    
+```
+
+<p>Ligaremos o jogo para testar e tudo funcionará conforme o esperado. Não conseguiremos perder pontos até ficar com um placar menor do que "0".</p>
+
+<p>Outra questão é que estamos utilizando as setas para cima e para baixo para movimentar o personagem. Mas ele consegue ultrapassar a tela quando o arrastamos para baixo. Será melhor limitarmos o valor do "y" dele, por exemplo, impedir que ele vá mais para baixo quando o valor for maior do que "366". Se for menor, aí sim podemos nos direcionar para cima.</p>
+
+<p>Vamos criar a função para saber se podemos mover nosso ator chamada podeSeMover() que retornará um valor verdadeiro ou falso. Se for verdade, moveremos nosso personagem.</p>
+
+```
+
+function movimentaAtor(){
+  if (keyIsDown(UP_ARROW)){
+    yAtor -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    if(podeSeMover()){
+    yAtor += 3;
+    }
+  }
+}
+
+function verificaColisao(){
+  //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+  for (let i = 0; i < imagemCarros.length; i++){
+    colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+    if (colisao){
+      voltaAtorParaPosicaoInicial();
+    if(pontosMaiorQueZero()){
+    meusPontos -= 1;
+    }
+    }
+  }
+}
+
+function voltaAtorParaPosicaoInicial(){
+  yAtor = 366;
+}
+
+function incluiPontos(){
+  textAlign(CENTER);
+  textSize(25);
+  fill(color(255, 240, 60))
+  text(meusPontos, width / 5, 27);
+}
+
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+    voltaAtorParaPosicaoInicial();
+  }
+}
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+    voltaAtorParaPosicaoInicial();
+  }
+}
+
+function pontosMaiorQueZero(){
+    return meusPontos > 0;
+}
+
+function podeSeMover(){
+    return yAtor < 366;
+}
+
+```
+
+<p>Vamos executar e agora quando apertarmos a seta para baixo com o personagem na posição inicial, ele não descerá mais. Também continuamos conseguindo marcar e perder pontos.</p>
+
+<p>Não temos mais pontos negativos e limitamos os movimentos do personagem.</p>
+
