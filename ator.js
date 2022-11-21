@@ -11,24 +11,24 @@ function mostrarAtor() {
 
 function movimentaAtor() {
     if (keyIsDown(UP_ARROW)) {
-        //if (podeSeMover()) {
-        yAtor -= 3;
-        //}
+        if (podeSeMover("up")) {
+            yAtor -= 3;
+        }
     }
     if (keyIsDown(DOWN_ARROW)) {
-        if (podeSeMover()) {
+        if (podeSeMover("down")) {
             yAtor += 3;
         }
     }
     if (keyIsDown(RIGHT_ARROW)) {
-        //if (podeSeMover()) {
-        xAtor += 3;
-        //}
+        if (podeSeMover("right")) {
+            xAtor += 3;
+        }
     }
     if (keyIsDown(LEFT_ARROW)) {
-        //if (podeSeMover()) {
-        xAtor -= 3;
-        //}
+        if (podeSeMover("left")) {
+            xAtor -= 3;
+        }
     }
 }
 
@@ -63,6 +63,14 @@ function pontosMaiorQueZero() {
     return meusPontos > 0
 }
 
-function podeSeMover() {
-    return yAtor < 366
+function podeSeMover(direcao) {
+    if (direcao == "down") {
+        return yAtor < 366
+    } else if (direcao == "left") {
+        return xAtor > 0
+    } else if (direcao == "right") {
+        return xAtor < 470
+    } else {
+        return yAtor > 0
+    }
 }
