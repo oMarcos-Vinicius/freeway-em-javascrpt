@@ -40,6 +40,7 @@ function verificaColisao() {
             if (pontosMaiorQueZero()) {
                 meusPontos--
             }
+            somDaColisao.play();
             yAtor = 366;
         }
     }
@@ -55,6 +56,7 @@ function incluiPontos() {
 function marcaPonto() {
     if (yAtor < 6) {
         meusPontos++
+        somDoPonto.play();
         yAtor = 366;
     }
 }

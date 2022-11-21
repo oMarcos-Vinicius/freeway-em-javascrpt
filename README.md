@@ -1388,3 +1388,149 @@ function podeSeMover(){
 
 <p>Não temos mais pontos negativos e limitamos os movimentos do personagem.</p>
 
+> Adicionando sons
+
+<p>Nosso jogo tem diversos elementos visuais e movimentação, mas ele está todo em silêncio. Não há efeito sonoro nenhum, o que deixa a imersão no nosso jogo prejudicada, pois não conseguimos ambientar o jogador tão bem sem o apoio de sons.</p>
+
+<p>Então, agora atacaremos esse ponto e vamos adicionar sons ao nosso jogo. Esse é um processo muito semelhante com o que fizemos no curso de Pong. Uma música de trilha era executada em loop, além de sons que tocavam durante o decorrer do jogo.</p>
+
+<p>No nosso caso seria legal se tivéssemos um som quando ganhamos um ponto e um quando ocorre a colisão, além da trilha sonora em loop. Os sons estão na mesma pasta de material que baixamos no início do curso juntamente com as imagens.</p>
+
+<p>Para deixar nosso jogo organizado, vamos criar uma pasta clicando na seta para baixo ao lado de "project-folder" e selecionaremos "Add folder". Chamaremos a pasta de "sons". Daremos um pause no jogo e veremos a pasta "sons" na nossa aba lateral esquerda da tela. Clicaremos na seta ao lado dessa pasta e clicaremos em "Add file" para adicionar novos arquivos.</p>
+
+<p>Acessaremos a pasta do material e clicaremos na pasta dos sons, selecionaremos os três e clicaremos em "Open". Teremos os três dentro da nossa pasta e precisaremos carregar esses sons no arquivo de "imagens". Vamos alterar o comentário no código para // Imagens e sons do jogo.</p>
+
+<p>Criaremos uma variável somDaTrilha para nossa trilha sonora e outra para armazenar os sons somDaColisao e por fim somDoPonto. Da mesma forma que carregamos nossas imagens, carregaremos os sons na função preload(). Colocaremos a variável somDaTrilha e atribuiremos a ela loadSound("") para passar o caminho sons/trilha.mp3. Faremos o mesmo para a colisão, loadSound("sons/colidiu.mp3").</p>
+
+<p>Para finalizar, o som do ponto será igual a loadSound("sons/pontos.wav"). Assim como nas imagens, precisamos passar a extensão do arquivo. Os som para os pontos será um arquivo .wav.</p>
+
+```
+// imagens e sons do jogo
+
+let imagemDaEstrada;
+let imagemDoAtor;
+let imagemCarro;
+let imagemCarro2;
+let imagemCarro3;
+let somDaTrilha;
+let somDaColisao;
+let somDoPonto;
+
+function preload(){
+  imagemDaEstrada = loadImage("imagens/estrada.png");
+  imagemDoAtor = loadImage("imagens/ator-1.png");
+  imagemCarro = loadImage("imagens/carro-1.png");
+  imagemCarro2 = loadImage("imagens/carro-2.png");
+  imagemCarro3 = loadImage("imagens/carro-3.png");  
+  imagemCarros = [imagemCarro, imagemCarro2, imagemCarro3, imagemCarro, 
+imagemCarro2, imagemCarro3];
+ somDaTrilha = loadSound("sons/trilha.mp3");
+ somDaColisao = loadSound("sons/colidiu.mp3")
+ somDoPonto= loadSound("sons/ponto.wav");
+}
+```
+<p>Agora que já temos esses sons, podemos executá-los no nosso jogo. Começaremos com o som da trilha, que deverá ser tocada assim que o jogo começa. Voltaremos para o "sketch.js" e na função setup() geraremos nosso Canvas. Na função draw(), iniciaremos nosso jogo.</p>
+
+<p>Na função setup() chamaremos somDaTrilha.loop. O loop é porque não queremos que esse arquivo seja executado uma vez apenas e sim repetidamente.</p>
+
+```
+function setup(){
+    createCanvas(500, 400);
+    somDaTrilha.loop();
+}
+
+```
+<p>Daremos um "Play". e nosso jogo funcionará com a música tocando.</p>
+
+<p>Ainda precisamos ir para o código do ator, em que estará a função de voltar para a posição inicial. Nela colocaremos para tocar o somDaColisao. Não poderemos usar somDaColisao.loop, pois dessa vez não queremos que o som toque para sempre, apenas na ocasião. Deixaremos como somDaColisao.play().</p>
+
+```
+function verificaColisao(){
+    //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+    for (let i = 0; i < imagemCarros.length; i++){
+      colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+        if (colisao){
+        voltaAtorParaPosicaoInicial();
+        somDaColisao.play();
+         if(pontosMaiorQueZero()){
+         meusPontos -= 1;
+         }
+       }
+     }
+  }
+
+```
+<p>Executando o jogo agora, temos o som da colisão quando os carros atingirem nosso personagem.</p>
+
+<p>Agora faltará o som referente a marcar pontos. Ainda no código do ator, quando ele chega até o outro lado da rua no jogo, é chamada uma função que marca os pontos. Nesse trecho, adicionaremos somDoPonto.play() para que ele seja executado uma vez.</p>
+
+```
+function marcaPonto(){
+  if (yAtor < 15){
+    meusPontos += 1;
+    somDoPonto.play();
+    voltaAtorParaPosicaoInicial();
+   }
+}
+```
+<p>Vamos executar nosso jogo e temos a trilha sonora, o som da colisão e quando ganhamos um ponto conseguindo chegar ao outro lado, também há um efeito sonoro.</p>
+
+<p>Dessa forma nosso jogo ja fica muito mais emocionante pois quem joga se sente mais inserido no contexto do jogo.</p>
+
+```
+//código do ator
+
+let xAtor = 85;
+let yAtor = 366;
+let colisao = false;
+let meusPontos = 0;
+
+function mostraAtor(){
+  image(imagemDoAtor, xAtor, yAtor, 30, 30);
+}
+function movimentaAtor(){
+    if (keyIsDown(UP_ARROW)){
+      yAtor -= 3;
+    }
+    if (keyIsDown(DOWN_ARROW)){
+      if(podeSeMover()){
+      yAtor += 3;
+      }
+    }
+  }
+
+function verificaColisao(){
+    //collideRectCircle(x1, y1, width1, height1, cx, cy, diameter)
+    for (let i = 0; i < imagemCarros.length; i++){
+      colisao = collideRectCircle(xCarros[i], yCarros[i], comprimentoCarro, alturaCarro, xAtor, yAtor, 15)
+        if (colisao){
+        voltaAtorParaPosicaoInicial();
+        somDaColisao.play();
+         if(pontosMaiorQueZero()){
+         meusPontos -= 1;
+         }
+       }
+    }
+ }
+ function voltaAtorParaPosicaoInicial(){
+    yAtor = 366;
+}
+
+function incluiPontos(){
+    textAlign(CENTER);
+    textSize(25);
+    fill(color(255, 240, 60));
+    text(meusPontos, width / 5, 27);
+}
+
+  function marcaPonto(){
+    if (yAtor < 15){
+      meusPontos += 1;
+      voltaAtorParaPosicaoInicial();
+    }
+}
+
+function pontosMaiorQueZero(){
+      return meusPontos > 0;
+} 
+```
